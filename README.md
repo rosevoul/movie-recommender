@@ -29,7 +29,13 @@ https://grouplens.org/datasets/movielens/20m/
 
 
 # How to run
-<!-- TODO -->
+
+Download the data and place it inside a data/ directory.
+Then run:
+```
+$ python prep.py
+$ python recommender_systems.py
+```
 
 # Next steps
 
