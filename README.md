@@ -10,7 +10,8 @@ Both non-personalized and personalized recommender systems are tested and compar
 
 > Personalized approaches 
 
-- [ ] Content-based recommendations 
+- [ ] Content-based recommendations: recommend  movies similar to previously watched ones
+    - [x] Genre-based recommendations, Jaccard similarity for big data
 - [ ] Collaborative Filter (matrix factorization approach using SVD) 
 - [ ] Hybrid recommender 
 

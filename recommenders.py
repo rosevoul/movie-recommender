@@ -1,6 +1,6 @@
 from itertools import permutations
 import pandas as pd
-
+from similarities import jaccard_similarity_big_data
 
 class PopularityRecommender:
 
@@ -56,5 +56,19 @@ class PairRecommender:
         recommendations = recommendations[recommendations['movie_a'] == last_movie_watched]
 
         N_recommendations = recommendations[['movie_b', 'pairs_num']][:N].reset_index(drop=True)
+
+        return N_recommendations
+
+
+class ContentBasedRecommender:
+    def __init__(self, movie_genres):
+        self.movie_genres = movie_genres
+
+    def recommendations(self, last_movie_watched, N=10):
+        target_movie = self.movie_genres.loc[last_movie_watched]
+        recommendations = jaccard_similarity_big_data(self.movie_genres, target_movie)
+        recommendations = recommendations[recommendations['title'] != last_movie_watched]
+
+        N_recommendations = recommendations.sort_values('jaccard_similarity', ascending=False)[:N]
 
         return N_recommendations
