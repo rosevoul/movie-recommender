@@ -10,9 +10,10 @@ Both non-personalized and personalized recommender systems are tested and compar
 
 > Personalized approaches 
 
-- [ ] Content-based recommendations: recommend  movies similar to previously watched ones
+- [ ] Content-based recommendations: recommend  movies with similar characteristics to previously watched ones
     - [x] Genre-based recommendations, Jaccard similarity for big data
     - [x] Plot/summary-based recommendations, NLP preprocessing, TF-IDF transformation and cosine similarity
+    - [x] Generate a user profile as a TFIDF embedding and generate similar recommendations
 - [ ] Collaborative Filter (matrix factorization approach using SVD) 
 - [ ] Hybrid recommender 
 

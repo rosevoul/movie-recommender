@@ -1,6 +1,6 @@
 # %%
 import pandas as pd
-from recommenders import PopularityRecommender, AvgRankingRecommender, PairRecommender, GenreBasedRecommender, PlotBasedRecommender
+from recommenders import PopularityRecommender, AvgRankingRecommender, PairRecommender, GenreBasedRecommender, PlotBasedRecommender, UserProfileRecommender
 # from evaluate import Evaluator
 
 
@@ -8,6 +8,7 @@ from recommenders import PopularityRecommender, AvgRankingRecommender, PairRecom
 ratings = pd.read_csv('data/movie_ratings.csv')
 movie_genres = pd.read_csv('data/movie_genres.csv', index_col='title')
 movie_plots = pd.read_csv('data/movie_plots.csv', index_col='title')
+tfidf_movie_plots= pd.read_csv('data/movie_plots_tfidf.csv', index_col='title')
 
 # Ignore movies the user has already watched and rated
 def filter_watched_movies(training_data, user_id, ignore_watched_movies=False):
@@ -47,8 +48,19 @@ rec_genre_based.recommendations(last_movie_watched)
 
 
 # %%
-rec_plot_based = PlotBasedRecommender(movie_plots)
+rec_plot_based = PlotBasedRecommender(tfidf_movie_plots)
 rec_plot_based.recommendations(last_movie_watched='Jack and the Beanstalk')
+
+# %% 
+# User profile
+movies_enjoyed_list = ['Kansas Saloon Smashers', 'Love by the Light of the Moon',
+       'The Martyred Presidents', 'Terrible Teddy, the Grizzly King']
+
+rec_user_prof = UserProfileRecommender(tfidf_movie_plots)
+rec_user_prof.recommendations(movies_enjoyed_list)
+
+
+
 # %%
 # TODO Evaluate
 

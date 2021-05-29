@@ -1,5 +1,5 @@
 from scipy.spatial.distance import pdist, squareform
-from sklearn.metrics.pairwise import pairwise_distances
+from sklearn.metrics.pairwise import pairwise_distances, cosine_similarity
 from itertools import combinations
 import pandas as pd
 
@@ -51,22 +51,25 @@ def jaccard_similarity_big_data(movie_genres, target_movie):
         results = pool.map(partial_jaccard, [row for row in X.values])
 
     return pd.DataFrame({'title': X.index, 'jaccard_similarity': results})
-
-
-def calc_cosine_similarity(movie_plots):
-    from sklearn.feature_extraction.text import TfidfVectorizer
-    from sklearn.metrics.pairwise import cosine_similarity
-
-    # Get the TF-IDF transformation of the data
-    vectorizer = TfidfVectorizer()
-    movie_plots = movie_plots[:1000] 
-    vec_data = vectorizer.fit_transform(movie_plots["plot_nlp"])
-
-    tfidf_df = pd.DataFrame(vec_data.toarray(), columns=vectorizer.get_feature_names())
-    tfidf_df.index = movie_plots.index
     
+
+def calc_cosine_similarity(tfidf_movie_plots):
+
+    assert tfidf_movie_plots.shape[0] <= 1000
+
     # Calculate the cosine similarity among movie embeddings
-    cosine_similarity_array = cosine_similarity(tfidf_df)
-    cosine_similarity_df = pd.DataFrame(cosine_similarity_array, index=tfidf_df.index, columns=tfidf_df.index)
+    cosine_similarity_array = cosine_similarity(tfidf_movie_plots)
+    cosine_similarity_df = pd.DataFrame(cosine_similarity_array, index=tfidf_movie_plots.index, columns=tfidf_movie_plots.index)
 
     return cosine_similarity_df
+
+def cosine_similarity_user_prof(tfidf_movie_plots, user_prof, movies_enjoyed):
+
+        # Find subset of tfidf_movie_plots that does not include movies in list_of_movies_enjoyed
+        tfidf_subset_df = tfidf_movie_plots.drop(movies_enjoyed, axis=0)
+
+        # Calculate the cosine_similarity and wrap it in a DataFrame
+        similarity_array = cosine_similarity(user_prof.values.reshape(1, -1), tfidf_subset_df)
+        similarity_df = pd.DataFrame(similarity_array.T, index=tfidf_subset_df.index, columns=["similarity_score"])
+        
+        return similarity_df

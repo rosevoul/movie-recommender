@@ -3,15 +3,44 @@ import pandas as pd
 from similarities import jaccard_similarity_big_data, jaccard_similarity_small_data, jaccard_similarity_score_big_data
 from nlp import nlp_prep
 
+def user_prof_tfidf(tfidf_movie_plots, movies_enjoyed):
+    # Create a subset of only the movies the user has enjoyed
+    movies_enjoyed_df = tfidf_movie_plots.reindex(movies_enjoyed)
+
+    # Generate the user profile by finding the average scores of movies they enjoyed
+    user_prof = movies_enjoyed_df.mean()
+
+    return user_prof
+
 def prep_data(ratings, movies, plots):
 
-    ratings = prep_ratings(ratings, movies)
+    movie_ratings = prep_ratings(ratings, movies)
     movie_genres = prep_movie_genres(movies)
     movie_plots = prep_movie_plots(plots)
+    tfidf_movie_plots = tfidf_transform(movie_plots)
+    
 
-    ratings.to_csv('data/movie_ratings.csv', index=False)
+    movie_ratings.to_csv('data/movie_ratings.csv', index=False)
     movie_genres.to_csv('data/movie_genres.csv')
     movie_plots.to_csv('data/movie_plots.csv')
+    tfidf_movie_plots.to_csv('data/movie_plots_tfidf.csv')
+
+
+def fill_nan_ratings(user_ratings):
+    # Get the average rating for each user 
+    avg_ratings = user_ratings.mean(axis=1)
+    # Center each users ratings around 0
+    user_ratings_centered = user_ratings.subtract(avg_ratings, axis=0)
+    # Fill in the missing data with 0s
+    user_ratings_normed = user_ratings_centered.fillna(0)
+
+    return user_ratings_normed
+
+def prep_user_ratings(movie_ratings):
+    user_ratings = movie_ratings.pivot(index='userId', columns='movie_title', values='rating')
+    user_ratings = fill_nan_ratings(user_ratings)
+
+    return user_ratings
 
 
 def prep_ratings(ratings, movies):
@@ -46,6 +75,21 @@ def prep_movie_plots(plots):
     movie_plots["plot_nlp"] = movie_plots["plot"].apply(nlp_prep)
 
     return movie_plots
+
+
+
+def tfidf_transform(movie_plots):
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    # Get the TF-IDF transformation of the data
+    vectorizer = TfidfVectorizer()
+    movie_plots = movie_plots[:1000] 
+    vec_data = vectorizer.fit_transform(movie_plots["plot_nlp"])
+
+    tfidf_df = pd.DataFrame(vec_data.toarray(), columns=vectorizer.get_feature_names())
+    tfidf_df.index = movie_plots.index
+
+    return tfidf_df
 
 
 ratings = pd.read_csv('data/ml-20m/ratings.csv')

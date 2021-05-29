@@ -1,6 +1,7 @@
 from itertools import permutations
 import pandas as pd
-from similarities import jaccard_similarity_big_data, calc_cosine_similarity
+from similarities import jaccard_similarity_big_data, calc_cosine_similarity, cosine_similarity_user_prof
+from prep import user_prof_tfidf
 
 class PopularityRecommender:
 
@@ -76,12 +77,24 @@ class GenreBasedRecommender:
 
 # Content-based recommender, content=plots
 class PlotBasedRecommender():
-    def __init__(self, movie_plots):
-        self.movie_plots = movie_plots
+    def __init__(self, tfidf_movie_plots):
+        self.tfidf_movie_plots = tfidf_movie_plots
 
     def recommendations(self, last_movie_watched, N=10):
-        cosine_sim_df = calc_cosine_similarity(self.movie_plots)
+        cosine_sim_df = calc_cosine_similarity(self.tfidf_movie_plots)
         N_recommendations = cosine_sim_df.loc[last_movie_watched]
         N_recommendations = N_recommendations.sort_values(ascending=False)[1:(N+1)]
         
         return N_recommendations
+
+
+class UserProfileRecommender():
+    def __init__(self, tfidf_movie_plots):
+        self.tfidf_movie_plots = tfidf_movie_plots
+
+    def recommendations(self, movies_enjoyed, N=10):
+        user_profile = user_prof_tfidf(self.tfidf_movie_plots, movies_enjoyed)
+        similarity_df = cosine_similarity_user_prof(self.tfidf_movie_plots, user_profile, movies_enjoyed)
+        sorted_similarity_df = similarity_df.sort_values(by="similarity_score", ascending=False)
+
+        return sorted_similarity_df.head(N)
