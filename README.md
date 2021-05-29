@@ -10,10 +10,10 @@ Both non-personalized and personalized recommender systems are tested and compar
 
 > Personalized approaches 
 
-- [ ] Content-based recommendations: recommend  movies with similar characteristics to previously watched ones
+- [x] Content-based recommendations: recommend  movies with similar characteristics to previously watched ones
     - [x] Genre-based recommendations, Jaccard similarity for big data
     - [x] Plot/summary-based recommendations, NLP preprocessing, TF-IDF transformation and cosine similarity
-    - [x] Generate a user profile as a TFIDF embedding and generate similar recommendations
+    - [x] Generate a user profile as a TFIDF embedding and produce similar recommendations
 - [ ] Collaborative Filter (matrix factorization approach using SVD) 
 - [ ] Hybrid recommender 
 
@@ -33,7 +33,7 @@ Download from:
 https://grouplens.org/datasets/movielens/20m/ 
 
 
-Additionally, the Wikipedia Movie Plots dataset, which contains ~35K plot summary descriptions scraped from Wikipedia.
+Additionally, the Wikipedia Movie Plots dataset is used, which contains ~35K plot summary descriptions scraped from Wikipedia.
 The data is contained in one file: `wiki_movie_plots_deduped.csv`
 
 
