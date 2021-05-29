@@ -1,6 +1,6 @@
 from itertools import permutations
 import pandas as pd
-from similarities import jaccard_similarity_big_data
+from similarities import jaccard_similarity_big_data, calc_cosine_similarity
 
 class PopularityRecommender:
 
@@ -59,8 +59,8 @@ class PairRecommender:
 
         return N_recommendations
 
-
-class ContentBasedRecommender:
+# Content-based recommender, content=genres
+class GenreBasedRecommender:
     def __init__(self, movie_genres):
         self.movie_genres = movie_genres
 
@@ -71,4 +71,17 @@ class ContentBasedRecommender:
 
         N_recommendations = recommendations.sort_values('jaccard_similarity', ascending=False)[:N]
 
+        return N_recommendations
+
+
+# Content-based recommender, content=plots
+class PlotBasedRecommender():
+    def __init__(self, movie_plots):
+        self.movie_plots = movie_plots
+
+    def recommendations(self, last_movie_watched, N=10):
+        cosine_sim_df = calc_cosine_similarity(self.movie_plots)
+        N_recommendations = cosine_sim_df.loc[last_movie_watched]
+        N_recommendations = N_recommendations.sort_values(ascending=False)[1:(N+1)]
+        
         return N_recommendations

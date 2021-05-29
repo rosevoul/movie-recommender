@@ -12,12 +12,16 @@ Both non-personalized and personalized recommender systems are tested and compar
 
 - [ ] Content-based recommendations: recommend  movies similar to previously watched ones
     - [x] Genre-based recommendations, Jaccard similarity for big data
+    - [x] Plot/summary-based recommendations, NLP preprocessing, TF-IDF transformation and cosine similarity
 - [ ] Collaborative Filter (matrix factorization approach using SVD) 
 - [ ] Hybrid recommender 
 
 
 
 # Dataset
+
+Two datasets are loaded to showcase the recommender system techniques utilised.
+
 The Movielens 20m dataset (ml-20m) describes 5-star rating and free-text tagging activity from [MovieLens](http://movielens.org), a movie recommendation service. It contains 20000263 ratings and 465564 tag applications across 27278 movies. These data were created by 138493 users between January 09, 1995 and March 31, 2015. This dataset was generated on March 31, 2015, and updated on October 17, 2016 to update links.csv and add genome-* files.
 
 Users were selected at random for inclusion. All selected users had rated at least 20 movies. No demographic information is included. Each user is represented by an id, and no other information is provided.
@@ -26,6 +30,17 @@ The data are contained in six files, `genome-scores.csv`, `genome-tags.csv`, `li
 
 Download from:
 https://grouplens.org/datasets/movielens/20m/ 
+
+
+Additionally, the Wikipedia Movie Plots dataset, which contains ~35K plot summary descriptions scraped from Wikipedia.
+The data is contained in one file: `wiki_movie_plots_deduped.csv`
+
+
+Download from:
+https://www.kaggle.com/jrobischon/wikipedia-movie-plots 
+
+
+
 
 
 # How to run

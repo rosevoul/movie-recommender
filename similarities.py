@@ -51,4 +51,22 @@ def jaccard_similarity_big_data(movie_genres, target_movie):
         results = pool.map(partial_jaccard, [row for row in X.values])
 
     return pd.DataFrame({'title': X.index, 'jaccard_similarity': results})
+
+
+def calc_cosine_similarity(movie_plots):
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    # Get the TF-IDF transformation of the data
+    vectorizer = TfidfVectorizer()
+    movie_plots = movie_plots[:1000] 
+    vec_data = vectorizer.fit_transform(movie_plots["plot_nlp"])
+
+    tfidf_df = pd.DataFrame(vec_data.toarray(), columns=vectorizer.get_feature_names())
+    tfidf_df.index = movie_plots.index
     
+    # Calculate the cosine similarity among movie embeddings
+    cosine_similarity_array = cosine_similarity(tfidf_df)
+    cosine_similarity_df = pd.DataFrame(cosine_similarity_array, index=tfidf_df.index, columns=tfidf_df.index)
+
+    return cosine_similarity_df

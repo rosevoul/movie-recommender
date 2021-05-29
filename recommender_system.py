@@ -1,12 +1,13 @@
 # %%
 import pandas as pd
-from recommenders import PopularityRecommender, AvgRankingRecommender, PairRecommender, ContentBasedRecommender
+from recommenders import PopularityRecommender, AvgRankingRecommender, PairRecommender, GenreBasedRecommender, PlotBasedRecommender
 # from evaluate import Evaluator
 
 
 # Load data
-ratings = pd.read_csv('data/rec_data.csv')
+ratings = pd.read_csv('data/movie_ratings.csv')
 movie_genres = pd.read_csv('data/movie_genres.csv', index_col='title')
+movie_plots = pd.read_csv('data/movie_plots.csv', index_col='title')
 
 # Ignore movies the user has already watched and rated
 def filter_watched_movies(training_data, user_id, ignore_watched_movies=False):
@@ -41,9 +42,13 @@ rec_pair.recommendations(last_movie_watched)
 
 
 # %%
-rec_content_based = ContentBasedRecommender(movie_genres)
-rec_content_based.recommendations(last_movie_watched)
+rec_genre_based = GenreBasedRecommender(movie_genres)
+rec_genre_based.recommendations(last_movie_watched)
 
+
+# %%
+rec_plot_based = PlotBasedRecommender(movie_plots)
+rec_plot_based.recommendations(last_movie_watched='Jack and the Beanstalk')
 # %%
 # TODO Evaluate
 
