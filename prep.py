@@ -18,12 +18,14 @@ def prep_data(ratings, movies, plots):
     movie_genres = prep_movie_genres(movies)
     movie_plots = prep_movie_plots(plots)
     tfidf_movie_plots = tfidf_transform(movie_plots)
-    
+    movie_ratings_centered = prep_movie_ratings_centered(prep_user_ratings_centered(movie_ratings))
 
     movie_ratings.to_csv('data/movie_ratings.csv', index=False)
     movie_genres.to_csv('data/movie_genres.csv')
     movie_plots.to_csv('data/movie_plots.csv')
     tfidf_movie_plots.to_csv('data/movie_plots_tfidf.csv')
+    movie_ratings_centered.to_csv('data/movie_ratings_centered.csv')
+
 
 
 def fill_nan_ratings(user_ratings):
@@ -36,11 +38,18 @@ def fill_nan_ratings(user_ratings):
 
     return user_ratings_normed
 
-def prep_user_ratings(movie_ratings):
+def prep_user_ratings_centered(movie_ratings):
+    movie_ratings = movie_ratings[:1000]
     user_ratings = movie_ratings.pivot(index='userId', columns='movie_title', values='rating')
-    user_ratings = fill_nan_ratings(user_ratings)
+    user_ratings_centered = fill_nan_ratings(user_ratings)
 
-    return user_ratings
+    return user_ratings_centered
+
+def prep_movie_ratings_centered(user_ratings_centered):
+    movie_ratings = user_ratings_centered.T
+
+    return movie_ratings
+
 
 
 def prep_ratings(ratings, movies):
@@ -66,12 +75,13 @@ def prep_movie_genres(movies):
 
 
 def prep_movie_plots(plots):
-    # Generate atable of titles and plots. 
+    # Generate a table of titles and plots. 
     # Also preprocess the plots with nlp
     
     movie_plots = plots[["Title", "Plot"]]
     movie_plots.columns = ['title', 'plot']
     movie_plots = movie_plots.set_index('title')
+    movie_plots.drop_duplicates(keep='first', inplace=True)
     movie_plots["plot_nlp"] = movie_plots["plot"].apply(nlp_prep)
 
     return movie_plots

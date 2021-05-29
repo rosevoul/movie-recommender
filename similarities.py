@@ -53,13 +53,13 @@ def jaccard_similarity_big_data(movie_genres, target_movie):
     return pd.DataFrame({'title': X.index, 'jaccard_similarity': results})
     
 
-def calc_cosine_similarity(tfidf_movie_plots):
+def calc_cosine_similarity(embeddings):
 
-    assert tfidf_movie_plots.shape[0] <= 1000
+    assert embeddings.shape[0] <= 1000
 
     # Calculate the cosine similarity among movie embeddings
-    cosine_similarity_array = cosine_similarity(tfidf_movie_plots)
-    cosine_similarity_df = pd.DataFrame(cosine_similarity_array, index=tfidf_movie_plots.index, columns=tfidf_movie_plots.index)
+    cosine_similarity_array = cosine_similarity(embeddings)
+    cosine_similarity_df = pd.DataFrame(cosine_similarity_array, index=embeddings.index, columns=embeddings.index)
 
     return cosine_similarity_df
 

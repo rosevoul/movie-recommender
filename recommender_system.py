@@ -1,14 +1,15 @@
 # %%
 import pandas as pd
-from recommenders import PopularityRecommender, AvgRankingRecommender, PairRecommender, GenreBasedRecommender, PlotBasedRecommender, UserProfileRecommender
+from recommenders import *
 # from evaluate import Evaluator
 
 
 # Load data
-ratings = pd.read_csv('data/movie_ratings.csv')
+ratings = pd.read_csv('data/movie_ratings.csv', nrows=1000)
 movie_genres = pd.read_csv('data/movie_genres.csv', index_col='title')
-movie_plots = pd.read_csv('data/movie_plots.csv', index_col='title')
-tfidf_movie_plots= pd.read_csv('data/movie_plots_tfidf.csv', index_col='title')
+movie_plots = pd.read_csv('data/movie_plots.csv', index_col='title', nrows=1000)
+tfidf_movie_plots= pd.read_csv('data/movie_plots_tfidf.csv', index_col='title', nrows=1000)
+movie_ratings_centered = pd.read_csv('data/movie_ratings_centered.csv', index_col='movie_title', nrows=1000)
 
 # Ignore movies the user has already watched and rated
 def filter_watched_movies(training_data, user_id, ignore_watched_movies=False):
@@ -59,6 +60,10 @@ movies_enjoyed_list = ['Kansas Saloon Smashers', 'Love by the Light of the Moon'
 rec_user_prof = UserProfileRecommender(tfidf_movie_plots)
 rec_user_prof.recommendations(movies_enjoyed_list)
 
+
+# %%
+rec_col_f = CollaborativeFilteringRecommender(movie_ratings_centered)
+rec_col_f.recommendations(last_movie_watched)
 
 
 # %%

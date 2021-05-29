@@ -14,7 +14,9 @@ Both non-personalized and personalized recommender systems are tested and compar
     - [x] Genre-based recommendations, Jaccard similarity for big data
     - [x] Plot/summary-based recommendations, NLP preprocessing, TF-IDF transformation and cosine similarity
     - [x] Generate a user profile as a TFIDF embedding and produce similar recommendations
-- [ ] Collaborative Filter (matrix factorization approach using SVD) 
+- [ ] Collaborative Filtering
+    - [x] sparse item-item matrix 
+    - [] matrix factorization approach using SVD 
 - [ ] Hybrid recommender 
 
 
