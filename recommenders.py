@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.neighbors import KNeighborsRegressor
 from similarities import jaccard_similarity_big_data, calc_cosine_similarity, cosine_similarity_user_prof
 from prep import user_prof_tfidf
+from utils import decompose_matrix
 
 
 class PopularityRecommender:
@@ -11,9 +12,9 @@ class PopularityRecommender:
         self.ratings = ratings
 
     def recommendations(self, N=10):
-        recommendations = self.ratings.drop_duplicates(subset='movieId', keep='first').reset_index() \
+        result = self.ratings.drop_duplicates(subset='movieId', keep='first').reset_index() \
             .sort_values('popularity', ascending=False)
-        n_recommendations = recommendations[[
+        n_recommendations = result[[
             'movie_title', 'popularity']][:N].reset_index(drop=True)
         return n_recommendations
 
@@ -35,9 +36,9 @@ class AvgRankingRecommender:
         popular_movies_average_rankings = self.find_popular_movies(
         )[['movie_title', 'rating']].groupby('movie_title').mean().reset_index()
         popular_movies_average_rankings.columns = ['movie_title', 'avg_rating']
-        recommendations = popular_movies_average_rankings.sort_values(
+        result = popular_movies_average_rankings.sort_values(
             by='avg_rating', ascending=False)
-        n_recommendations = recommendations[[
+        n_recommendations = result[[
             'movie_title', 'avg_rating']][:N].reset_index(drop=True)
 
         return n_recommendations
@@ -62,11 +63,11 @@ class PairRecommender:
         return combination_counts
 
     def recommendations(self, last_movie_watched, N=10):
-        recommendations = self.create_pairs().sort_values('pairs_num', ascending=False)
-        recommendations = recommendations[recommendations['movie_a']
-                                          == last_movie_watched]
+        result = self.create_pairs().sort_values('pairs_num', ascending=False)
+        result = result[result['movie_a']
+                        == last_movie_watched]
 
-        n_recommendations = recommendations[[
+        n_recommendations = result[[
             'movie_b', 'pairs_num']][:N].reset_index(drop=True)
 
         return n_recommendations
@@ -80,12 +81,12 @@ class GenreBasedRecommender:
 
     def recommendations(self, last_movie_watched, N=10):
         target_movie = self.movie_genres.loc[last_movie_watched]
-        recommendations = jaccard_similarity_big_data(
+        similarities = jaccard_similarity_big_data(
             self.movie_genres, target_movie)
-        recommendations = recommendations[recommendations['title']
-                                          != last_movie_watched]
+        similarities = similarities[similarities['title']
+                                    != last_movie_watched]
 
-        n_recommendations = recommendations.sort_values(
+        n_recommendations = similarities.sort_values(
             'jaccard_similarity', ascending=False)[:N]
 
         return n_recommendations
@@ -183,8 +184,19 @@ class KnnRecommender:
         predictions = pd.DataFrame(
             {'unwatched_movies': unwatched_movies, 'pred_ratings': pred_ratings})
 
-
         n_recommendations = predictions.sort_values(
             'pred_ratings', ascending=False)[:N]
+
+        return n_recommendations
+
+
+class SVDRecomender:
+    def __init__(self, user_ratings):
+        self.user_ratings = user_ratings
+
+    def recommendations(self, user, N=10):
+        predictions = decompose_matrix(self.user_ratings)
+        n_recommendations = predictions.loc[user, :].sort_values(ascending=False)[
+            :N]
 
         return n_recommendations

@@ -4,9 +4,9 @@ Both non-personalized and personalized recommender systems are tested and compar
 
 > Non personalized approaches 
 
-- [x] Popularity-based: recommends the top 10 most popular movies to each user
-- [x] Average ranking: recommends the top 10 both top ranked and most popular movies to each user
-- [x] Pair-wise: recommends the top 10 most popular movies to each user by taking into account the proximity (permutations) to the last movie the user watched
+- [x] Popularity-based: recommend the top 10 most popular movies to each user
+- [x] Average ranking: recommend the top 10 both top ranked and most popular movies to each user
+- [x] Pair-wise: recommend the top 10 most popular movies to each user by taking into account the proximity (permutations) to the last movie the user watched
 
 > Personalized approaches 
 
@@ -15,9 +15,9 @@ Both non-personalized and personalized recommender systems are tested and compar
     - [x] Plot/summary-based recommendations, NLP preprocessing, TF-IDF transformation and cosine similarity
     - [x] Generate a user profile as a TFIDF embedding and produce similar recommendations
 - [ ] Collaborative Filtering
-    - [x] sparse item-item matrix 
+    - [x] Sparse item-item matrix 
     - [x] KNN similar user ratings of unseen movies (cosine similarity)
-    - [] matrix factorization approach using SVD 
+    - [x] Matrix factorization approach using SVD 
 - [ ] Hybrid recommender 
 
 

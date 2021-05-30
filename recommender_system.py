@@ -72,6 +72,11 @@ rec_col_f.recommendations(last_movie_watched)
 knn_rec = KnnRecommender(user_ratings, user_ratings_centered)
 knn_rec.recommendations(user=1)
 
+
+# %%
+svd_rec = SVDRecomender(user_ratings)
+svd_rec.recommendations(1)
+
 # # %%
 # # TODO Evaluate
 
