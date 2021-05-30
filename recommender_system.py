@@ -1,7 +1,6 @@
 # %%
 import pandas as pd
 from recommenders import *
-# from evaluate import Evaluator
 
 
 # Load data
@@ -74,7 +73,7 @@ knn_rec.recommendations(user=1)
 
 
 # %%
-svd_rec = SVDRecomender(user_ratings)
+svd_rec = SVDRecommender(user_ratings)
 svd_rec.recommendations(1)
 
 # # %%

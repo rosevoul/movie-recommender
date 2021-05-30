@@ -171,8 +171,8 @@ class KnnRecommender:
         return prediction[0].item()
 
     def recommendations(self, user, N=10):
-        # TODO find all unwatched movies / assume all watched movies are also rated
-        # TODO apply KNN model to predict the user rating and store for each unwatched movie
+        # find all unwatched movies / assume all watched movies are also rated
+        # apply KNN model to predict the user rating and store for each unwatched movie
         pred_ratings = []
         user_movies = self.user_ratings.loc[1]
         unwatched_movies = user_movies[user_movies.isna()].index.tolist()
@@ -180,7 +180,7 @@ class KnnRecommender:
             pred_rating = self.knn_model_prediction(user, movie)
             pred_ratings.append(pred_rating)
 
-        # TODO order the movie and the predicted ratings
+        # order the movie and the predicted ratings
         predictions = pd.DataFrame(
             {'unwatched_movies': unwatched_movies, 'pred_ratings': pred_ratings})
 
@@ -190,12 +190,15 @@ class KnnRecommender:
         return n_recommendations
 
 
-class SVDRecomender:
+class SVDRecommender:
     def __init__(self, user_ratings):
         self.user_ratings = user_ratings
 
+    def predict(self):
+        return decompose_matrix(self.user_ratings)
+
     def recommendations(self, user, N=10):
-        predictions = decompose_matrix(self.user_ratings)
+        predictions = self.predict()
         n_recommendations = predictions.loc[user, :].sort_values(ascending=False)[
             :N]
 
