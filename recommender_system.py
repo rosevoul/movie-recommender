@@ -10,7 +10,10 @@ movie_genres = pd.read_csv('data/movie_genres.csv', index_col='title')
 movie_plots = pd.read_csv('data/movie_plots.csv', index_col='title', nrows=1000)
 tfidf_movie_plots= pd.read_csv('data/movie_plots_tfidf.csv', index_col='title', nrows=1000)
 movie_ratings_centered = pd.read_csv('data/movie_ratings_centered.csv', index_col='movie_title', nrows=1000)
+user_ratings = pd.read_csv('data/user_ratings.csv', index_col='userId', nrows=1000)
+user_ratings_centered = pd.read_csv('data/user_ratings_centered.csv', index_col='userId', nrows=1000)
 
+# %%
 # Ignore movies the user has already watched and rated
 def filter_watched_movies(training_data, user_id, ignore_watched_movies=False):
     if ignore_watched_movies:
@@ -65,7 +68,10 @@ rec_user_prof.recommendations(movies_enjoyed_list)
 rec_col_f = CollaborativeFilteringRecommender(movie_ratings_centered)
 rec_col_f.recommendations(last_movie_watched)
 
-
 # %%
-# TODO Evaluate
+knn_rec = KnnRecommender(user_ratings, user_ratings_centered)
+knn_rec.recommendations(user=1)
+
+# # %%
+# # TODO Evaluate
 

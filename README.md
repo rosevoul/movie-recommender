@@ -16,6 +16,7 @@ Both non-personalized and personalized recommender systems are tested and compar
     - [x] Generate a user profile as a TFIDF embedding and produce similar recommendations
 - [ ] Collaborative Filtering
     - [x] sparse item-item matrix 
+    - [x] KNN similar user ratings of unseen movies (cosine similarity)
     - [] matrix factorization approach using SVD 
 - [ ] Hybrid recommender 
 
